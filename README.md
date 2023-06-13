@@ -12,15 +12,15 @@ https://stackoverflow.com/questions/7517688/rotate-a-java-graphics2d-rectangle\
 ---- TBD ----\
 /*
     Cliente\
-       > -   2 panels\
-       >>     -   display pontuacao\
-       >>     -   display arena\
-       > -   players\
-        >>    -   enviar informacao(se tecla esta clicada) \  
+       ->   2 panels\
+       ---->     display pontuacao\
+       ---->     display arena\
+       ->   players\
+       ---->      enviar informacao(se tecla esta clicada) \  
     Servidor\
-       > -   Jogador\
-       >>     - calcular posicoes\
-        >>>        - passar (frente, angulo, tiro)\
-       > -   pontuacao\
-       > -   Conexao\
+       ->   Jogador\
+       ---->      calcular posicoes\
+       -------->      - passar (frente, angulo, tiro)\
+       ->   pontuacao\
+       ->   Conexao\
 */
