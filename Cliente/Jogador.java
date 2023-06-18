@@ -19,10 +19,21 @@ public class Jogador{
     public void drawSprite(Graphics2D g2d){
         //Rectangle2D.Double square = new Rectangle2D.Double(posX, posY, size, size);
         Ellipse2D.Double circle = new Ellipse2D.Double(posX, posY, size, size);
-        Line2D.Double direcao = new Line2D.Double(posX+25, posY+25, size*Math.cos(angulo) + posX + 25, size*Math.sin(angulo) + posY + 25);
+        double meio = size/2;
+        Line2D.Double direcao = new Line2D.Double(posX+meio, posY+meio, size*Math.cos(angulo) + posX + meio, size*Math.sin(angulo) + posY + meio);
         g2d.setColor(color);
         g2d.fill(circle);
         g2d.setColor(Color.BLACK);
         g2d.draw(direcao);
+    }
+
+    public void setX(double x){
+        posX = x;
+    }
+    public void setY(double y){
+        posY = y;
+    }
+    public void setAngulo(double a){
+        angulo = a;
     }
 }
