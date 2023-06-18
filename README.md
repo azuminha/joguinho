@@ -1,4 +1,4 @@
- ----  JOGO JAVA  ----\
+ ---  JOGO JAVA  ----\
 
 Sending coordinates between 2 players over a network in Java - PART 01\
  https://www.youtube.com/watch?v=tABiMTmS3cQ\
