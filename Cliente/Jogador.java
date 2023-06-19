@@ -6,7 +6,7 @@ import org.w3c.dom.css.Rect;
 
 public class Jogador{
     double posX, posY, angulo, size;
-    Color color;
+    private Color color;
 
     public Jogador(double x, double y, double a, double s, Color c){
         posX = x;
@@ -27,13 +27,13 @@ public class Jogador{
         g2d.draw(direcao);
     }
 
-    public void setX(double x){
+    public void setX(double x) {
         posX = x;
     }
-    public void setY(double y){
+    public void setY(double y) {
         posY = y;
     }
-    public void setAngulo(double a){
+    public void setAngulo(double a) {
         angulo = a;
     }
 }
