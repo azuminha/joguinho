@@ -1,6 +1,6 @@
  ---  COMO USAR  ----\
  
-As pastas 'Cliente' e 'Servidor' possuem dois arquivos .sh
+As pastas 'Cliente' e 'Servidor' possuem dois arquivos .sh.
 Use "chmod +x arquivo.sh" para utilizá-los.
 
  ---  JOGO JAVA  ----\
