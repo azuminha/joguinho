@@ -24,8 +24,6 @@ https://stackoverflow.com/questions/7517688/rotate-a-java-graphics2d-rectangle\
        ---->      enviar informacao(se tecla esta clicada) \  
     Servidor\
        ->   Jogador\
-       ---->      calcular posicoes\
-       -------->      - passar (frente, angulo, tiro)\
        ->   pontuacao\
        ->   Conexao\
 */
