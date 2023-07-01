@@ -8,13 +8,37 @@ public class Servidor{
     private ServerSocket serverSocket = null;
     private Socket p1Socket, p2Socket;
     private int numPlayers = 0, maxPlayers = 2;
-    private double p1x = 100, p1y = 400, p2x = 600, p2y = 400;
+    private double p1x = 60, p1y = 450, p2x = 730, p2y = 450;
     private double p1angulo = 0, p2angulo = 3.1415; 
-    private double p1TiroX = 100, p1TiroY = 400, p2TiroX = 600, p2TiroY = 400;
+    private double p1TiroX = 60, p1TiroY = 450, p2TiroX = 730, p2TiroY = 450;
     private double p1anguloTiro = 0, p2anguloTiro = 3.1415;
     private InformacoesDoCliente p1RecebeInfo, p2RecebeInfo;
     private InformacoesParaOCliente p1MandaInfo, p2MandaInfo;
     
+    private boolean jogoFinalizado = false;
+
+    int pontos1 = 0, pontos2 = 0;
+
+
+    int tamJogador = 35;
+    int mapaWidth = 800, mapaHeight = 600;
+    int tileSize = 50;
+    int mapaHeight_offset = 200;
+    public int[][] mapa = {
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1},
+        {1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1},
+        {1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}     
+    };
+
     public Servidor() {
         System.out.println("===== GAME SERVER =====");
         numPlayers = 0;
@@ -68,6 +92,7 @@ public class Servidor{
     private class InformacoesDoCliente implements Runnable {
         private int playerID;
         private DataInputStream dataIn;
+        private boolean contou1 = false, contou2 = false;
 
         public InformacoesDoCliente(int pID, DataInputStream in) {
             playerID = pID;
@@ -93,6 +118,41 @@ public class Servidor{
                         p2TiroY = dataIn.readDouble();
                         p2anguloTiro = dataIn.readDouble();
                     }
+                    
+                    
+                    double pontoTiroX = tamJogador*Math.cos(p1anguloTiro) + p1TiroX+ tamJogador/2;
+                    double pontoTiroY = tamJogador*Math.sin(p1anguloTiro) + p1TiroY + tamJogador/2;
+
+                    double distTiroP1 = (p2x + tamJogador/2 - pontoTiroX) * (p2x + tamJogador/2 - pontoTiroX)+
+                                        (p2y + tamJogador/2 - pontoTiroY) * (p2y + tamJogador/2 - pontoTiroY);
+                     
+                    if(distTiroP1 <= 17 * 17 && !contou1){
+                        pontos1++;
+                        contou1 = true;
+                    }
+
+                    pontoTiroX = tamJogador*Math.cos(p2anguloTiro) + p2TiroX+ tamJogador/2;
+                    pontoTiroY = tamJogador*Math.sin(p2anguloTiro) + p2TiroY + tamJogador/2;
+
+                    double distTiroP2 = (p1x + tamJogador/2 - pontoTiroX) * (p1x + tamJogador/2 - pontoTiroX) +
+                                        (p1y + tamJogador/2 - pontoTiroY) * (p1y + tamJogador/2 - pontoTiroY);
+                    if(distTiroP2 <= 17 * 17 && !contou2){
+                        pontos2++;
+                        contou2 = true;
+                    }
+                    
+                    if(pontos1 >= 18 || pontos2 >= 18){
+                        jogoFinalizado = true;
+                    }
+                    if(distTiroP1 >= 50*50){
+                        contou1 = false;
+                    }
+                    if(distTiroP2 >= 50*50){
+                        contou2 = false;
+                    }
+                    System.out.println("p1 : " + pontos1 + " p2 : " + pontos2);
+                   
+                    
                 }
             } catch(IOException e) {
                 System.out.println("IOException quando o servidor recebe as informacoes.");
@@ -111,7 +171,12 @@ public class Servidor{
 
         public void run() {
             try {
+
                 while(true) {
+                    dataOut.writeInt(pontos1);
+                    dataOut.writeInt(pontos2);
+                    dataOut.writeBoolean(jogoFinalizado);
+
                     if(playerID == 1) {
                         dataOut.writeDouble(p2x);
                         dataOut.writeDouble(p2y);
@@ -129,6 +194,14 @@ public class Servidor{
                         dataOut.writeDouble(p1TiroY);
                         dataOut.writeDouble(p1anguloTiro);
                         dataOut.flush();
+                    }
+
+                    if(jogoFinalizado){
+                        if(pontos1 > pontos2){
+                            dataOut.writeInt(1);
+                        }else{
+                            dataOut.writeInt(2);
+                        }
                     }
                     try {
                         Thread.sleep(25);
